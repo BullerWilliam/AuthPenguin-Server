@@ -19,8 +19,6 @@ const {
 // Import routes
 const authRoutes = require('./src/routes/auth');
 const oauthRoutes = require('./src/routes/oauth');
-const scratchRoutes = require('./src/routes/scratch');
-const soundcloudRoutes = require('./src/routes/soundcloud');
 const adminRoutes = require('./src/routes/admin');
 
 const app = express();
@@ -50,7 +48,8 @@ app.use(session({
     saveUninitialized: false,
     cookie: { 
         secure: process.env.NODE_ENV === 'production', 
-        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        sameSite: 'lax'
     }
 }));
 
@@ -89,8 +88,6 @@ app.use('/auth', checkOrigin);
 // Routes
 app.use('/auth', authRoutes);
 app.use('/auth', oauthRoutes);
-app.use('/auth', scratchRoutes);
-app.use('/auth', soundcloudRoutes);
 
 // Admin routes (separate from auth middleware)
 app.use('/admin', adminRoutes);
