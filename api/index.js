@@ -33,13 +33,15 @@ async function initializeApp() {
         
         // Configure Passport
         configurePassport();
+        console.log('App initialized successfully');
     } catch (error) {
         console.error('Initialization error:', error);
+        throw error;
     }
 }
 
-// Initialize immediately
-initializeApp();
+// Initialize immediately - but don't block requests
+initializeApp().catch(err => console.error('Failed to initialize:', err));
 
 // Middleware
 app.use(cors({
