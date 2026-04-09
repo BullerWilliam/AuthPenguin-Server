@@ -2,8 +2,6 @@ const passport = require('passport');
 const DiscordStrategy = require('passport-discord').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const GitHubStrategy = require('passport-github2').Strategy;
-const ScratchStrategy = require('../strategies/scratch');
-const SoundCloudStrategy = require('../strategies/soundcloud');
 
 const configurePassport = () => {
     // Passport serialization
@@ -73,19 +71,6 @@ const configurePassport = () => {
         return done(null, user);
     }));
 
-    // Scratch Strategy
-    passport.use(new ScratchStrategy({}, (accessToken, refreshToken, profile, done) => {
-        return done(null, profile);
-    }));
-
-    // SoundCloud Strategy
-    passport.use(new SoundCloudStrategy({
-        clientID: process.env.SOUNDCLOUD_CLIENT_ID,
-        clientSecret: process.env.SOUNDCLOUD_CLIENT_SECRET,
-        callbackURL: `${process.env.BASE_URL || 'http://localhost:3000'}/auth/soundcloud/callback`
-    }, (accessToken, refreshToken, profile, done) => {
-        return done(null, profile);
-    }));
 };
 
 module.exports = configurePassport;
