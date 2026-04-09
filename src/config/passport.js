@@ -38,8 +38,8 @@ const configurePassport = () => {
             username: profile.displayName,
             displayName: profile.displayName,
             name: profile.name,
-            email: profile.emails[0].value,
-            avatar: profile.photos[0].value,
+            email: profile.emails && profile.emails[0] ? profile.emails[0].value : null,
+            avatar: profile.photos && profile.photos[0] ? profile.photos[0].value : null,
             provider: 'google'
         };
         return done(null, user);
@@ -49,14 +49,14 @@ const configurePassport = () => {
     passport.use(new GitHubStrategy({
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: `${process.env.BASE_URL.replace("https", "http") || 'http://localhost:3000'}/auth/github/callback`
+        callbackURL: `${process.env.BASE_URL || 'http://localhost:3000'}/auth/github/callback`
     }, (accessToken, refreshToken, profile, done) => {
         const user = {
             id: profile.id,
             username: profile.username || profile._json.login,
             name: profile._json.name,
-            email: profile.emails ? profile.emails[0].value : null,
-            avatar: profile.photos[0].value,
+            email: profile.emails && profile.emails[0] ? profile.emails[0].value : null,
+            avatar: profile.photos && profile.photos[0] ? profile.photos[0].value : null,
             bio: profile._json.bio,
             provider: 'github',
             github: {
