@@ -23,11 +23,23 @@ const adminRoutes = require('../src/routes/admin');
 
 const app = express();
 
-// Connect to Redis
-connectRedis();
+// Initialize
+async function initializeApp() {
+    try {
+        // Connect to Redis with error handling
+        await connectRedis().catch(err => {
+            console.warn('Redis connection failed, continuing with in-memory store:', err.message);
+        });
+        
+        // Configure Passport
+        configurePassport();
+    } catch (error) {
+        console.error('Initialization error:', error);
+    }
+}
 
-// Configure Passport
-configurePassport();
+// Initialize immediately
+initializeApp();
 
 // Middleware
 app.use(cors({
